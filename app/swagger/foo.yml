@@ -1,0 +1,18 @@
+GET:
+  operationId: foo-route
+  parameters:
+    - name: foo
+      in: query
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: The User
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
