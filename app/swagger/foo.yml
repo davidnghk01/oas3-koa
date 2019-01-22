@@ -1,18 +1,56 @@
-GET:
-  operationId: foo-route
-  parameters:
-    - name: foo
-      in: query
-      required: true
-      schema:
-        type: string
-  responses:
-    '200':
-      description: The User
-      content:
-        application/json:
+openapi: 3.0.0
+info:
+  title: Demo of OAS3 with KOA
+  version: 1.0.0
+paths:
+  /api/foo:
+    get:
+      operationId: foo-route
+      parameters:
+        - name: foo
+          in: query
+          required: true
           schema:
-            type: object
-            properties:
-              id:
-                type: string
+            type: string
+      responses:
+        '200':
+          description: The User
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/foo'
+                  - $ref: '#/components/schemas/bar'
+                discriminator:
+                  propertyName: type
+                  mapping:
+                    foo: '#/components/schemas/foo'
+                    bar: '#/components/schemas/bar'
+components:
+  schemas:
+    foo:
+      type: object
+      properties:
+        id:
+          type: string
+        fooValue:
+          type: number
+        type:
+          type: string
+      required:
+        - id
+        - fooValue
+        - type
+    bar:
+      type: object
+      properties:
+        id:
+          type: string
+        barValue:
+          type: number
+        type:
+          type: string
+      required:
+        - id
+        - barValue
+        - type
