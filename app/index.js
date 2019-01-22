@@ -1,11 +1,16 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
+const {swaggerMiddleware, initSwagger} = require('./swagger');
 const routes = require('./routes');
 
-const app = new Koa();
+async function createApp() {
+  const swagger = await initSwagger();
+  const app = new Koa();
+  app.use(bodyParser());
+  app.use(swaggerMiddleware(swagger));
+  app.use(routes.routes());
+  app.use(routes.allowedMethods());
+  return app;
+}
 
-app.use(bodyParser());
-
-app.use(routes.routes());
-app.use(routes.allowedMethods());
-module.exports = app;
+module.exports = createApp;
